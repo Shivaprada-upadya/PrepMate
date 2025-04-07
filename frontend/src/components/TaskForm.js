@@ -20,12 +20,14 @@ const TaskForm = ({ onTaskAdded }) => {
 
     try {
       await addTask(task);
+      toast.success("Task added!");
       setTitle("");
       setDay("");
       setWeek("");
       onTaskAdded(); // refresh list
     } catch (error) {
-      console.error("Error adding task:", error);
+      //console.error("Error adding task:", error);
+      toast.error("Failed to add task");
     }
   };
 

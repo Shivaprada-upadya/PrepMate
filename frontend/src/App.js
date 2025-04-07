@@ -1,252 +1,147 @@
-import React, { useState, useEffect } from "react";
-import { fetchTasks, addTask, updateTask, deleteTask } from "./services/api";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState("");
-  const [day, setDay] = useState("");
-  const [week, setWeek] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [newTask, setNewTask] = useState({ title: "", week: 1, day: 1 });
   const [editId, setEditId] = useState(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editDay, setEditDay] = useState("");
-  const [editWeek, setEditWeek] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+
+  const fetchTasks = async () => {
+    const response = await axios.get("http://localhost:8080/api/tasks");
+    setTasks(response.data);
+  };
 
   useEffect(() => {
-    fetchTasks().then((response) => setTasks(response.data));
+    fetchTasks();
   }, []);
 
-  const handleAddTask = () => {
-    if (!title.trim() || !day.trim() || !week.trim()) return;
-    const newTask = { title, day, week, completed: false };
-    addTask(newTask).then((response) => {
-      setTasks([...tasks, response.data]);
-      setTitle("");
-      setDay("");
-      setWeek("");
-    });
+  const handleAddTask = async () => {
+    if (!newTask.title.trim()) {
+      toast.warning("Please enter a task title");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:8080/api/tasks", {
+        ...newTask,
+        completed: false,
+      });
+      toast.success("Task added!");
+      setNewTask({ title: "", week: 1, day: 1 });
+      fetchTasks();
+    } catch {
+      toast.error("Failed to add task");
+    }
   };
 
-  const handleToggleComplete = (task) => {
-    const updated = { ...task, completed: !task.completed };
-    updateTask(task.id, updated).then((response) => {
-      setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
-    });
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:8080/api/tasks/${id}`);
+    toast.error("Task deleted");
+    fetchTasks();
   };
 
-  const handleDelete = (id) => {
-    deleteTask(id).then(() => {
-      setTasks(tasks.filter((task) => task.id !== id));
+  const handleComplete = async (task) => {
+    await axios.put(`http://localhost:8080/api/tasks/${task.id}`, {
+      ...task,
+      completed: !task.completed,
     });
+    toast.info("Task status updated");
+    fetchTasks();
   };
 
   const handleEdit = (task) => {
     setEditId(task.id);
-    setEditTitle(task.title);
-    setEditDay(task.day);
-    setEditWeek(task.week);
+    setNewTask({ title: task.title, week: task.week, day: task.day });
   };
 
-  const handleSaveEdit = (task) => {
-    const updatedTask = {
-      ...task,
-      title: editTitle,
-      day: editDay,
-      week: editWeek,
-    };
-    updateTask(task.id, updatedTask).then((response) => {
-      setTasks(tasks.map((t) => (t.id === task.id ? response.data : t)));
-      setEditId(null);
+  const handleUpdate = async () => {
+    if (!newTask.title.trim()) {
+      toast.warning("Title cannot be empty");
+      return;
+    }
+
+    await axios.put(`http://localhost:8080/api/tasks/${editId}`, {
+      ...newTask,
+      completed: false,
     });
+
+    toast.success("Task updated");
+    setEditId(null);
+    setNewTask({ title: "", week: 1, day: 1 });
+    fetchTasks();
   };
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
   return (
-    <div
-      style={{
-        ...styles.container,
-        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
-        color: darkMode ? "#f2f2f2" : "#000000",
-      }}
-    >
-      <button onClick={toggleDarkMode} style={styles.darkToggle}>
-        {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-      </button>
+    <div className={darkMode ? "app dark-mode" : "app"}>
+      <h1>🚀 Placement Prep Tracker</h1>
 
-      <h1 style={styles.heading}>
-        <span role="img" aria-label="notebook">📒</span> Placement Prep Tracker
-      </h1>
-
-      <div style={styles.inputGroup}>
+      <div className="form">
         <input
-          style={styles.input}
+          type="text"
           placeholder="Task title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={newTask.title}
+          onChange={(e) =>
+            setNewTask({ ...newTask, title: e.target.value })
+          }
         />
         <input
-          style={styles.input}
-          placeholder="Day"
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-        />
-        <input
-          style={styles.input}
+          type="number"
           placeholder="Week"
-          value={week}
-          onChange={(e) => setWeek(e.target.value)}
+          min="1"
+          value={newTask.week}
+          onChange={(e) =>
+            setNewTask({ ...newTask, week: parseInt(e.target.value) })
+          }
         />
-        <button style={styles.button} onClick={handleAddTask}>Add</button>
+        <input
+          type="number"
+          placeholder="Day"
+          min="1"
+          value={newTask.day}
+          onChange={(e) =>
+            setNewTask({ ...newTask, day: parseInt(e.target.value) })
+          }
+        />
+        {editId ? (
+          <button onClick={handleUpdate}>Update</button>
+        ) : (
+          <button onClick={handleAddTask}>Add Task</button>
+        )}
+        <button className="dark-toggle" onClick={toggleDarkMode}>
+          {darkMode ? "☀️ Light" : "🌙 Dark"}
+        </button>
       </div>
 
-      <ul style={styles.taskList}>
+      <div className="task-list">
         {tasks.map((task) => (
-          <li
+          <div
             key={task.id}
-            style={{
-              ...styles.taskItem,
-              backgroundColor: darkMode ? "#333" : "#f9f9f9",
-            }}
+            className={`task ${task.completed ? "completed" : ""}`}
           >
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => handleToggleComplete(task)}
-            />
-            {editId === task.id ? (
-              <>
-                <input
-                  style={styles.editInput}
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                />
-                <input
-                  style={styles.editInput}
-                  value={editDay}
-                  onChange={(e) => setEditDay(e.target.value)}
-                />
-                <input
-                  style={styles.editInput}
-                  value={editWeek}
-                  onChange={(e) => setEditWeek(e.target.value)}
-                />
-                <button style={styles.saveBtn} onClick={() => handleSaveEdit(task)}>  <span></span>💾</button>
-              </>
-            ) : (
-              <>
-                <span
-                  style={{
-                    ...styles.taskText,
-                    textDecoration: task.completed ? "line-through" : "none",
-                  }}
-                >
-                  {task.title} - {task.day} - {task.week}
-                </span>
-               <button style={styles.editBtn} onClick={() => handleEdit(task)}>✏️</button> 
-              </>
-            )}
-            <button style={styles.deleteButton} onClick={() => handleDelete(task.id)}>
-           <span></span>   ❌
-            </button>
-          </li>
+            <h3>{task.title}</h3>
+            <p>
+              Week {task.week}, Day {task.day}
+            </p>
+            <div className="actions">
+              <button onClick={() => handleComplete(task)}>
+                {task.completed ? "Undo" : "Complete"}
+              </button>
+              <button onClick={() => handleEdit(task)}>Edit</button>
+              <button onClick={() => handleDelete(task.id)}>Delete</button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "800px",
-    margin: "auto",
-    padding: "30px",
-    fontFamily: "Arial, sans-serif",
-    minHeight: "100vh",
-    transition: "background-color 0.3s, color 0.3s",
-  },
-  heading: {
-    fontSize: "28px",
-    marginBottom: "20px",
-    fontWeight: "bold",
-  },
-  darkToggle: {
-    marginBottom: "20px",
-    padding: "8px 15px",
-    fontSize: "14px",
-    borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#4CAF50",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  inputGroup: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px",
-    marginBottom: "20px",
-    flexWrap: "wrap",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    width: "30%",
-    minWidth: "120px",
-  },
-  button: {
-    padding: "10px 15px",
-    border: "none",
-    backgroundColor: "#4CAF50",
-    color: "#fff",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  taskList: {
-    listStyle: "none",
-    padding: 0,
-  },
-  taskItem: {
-    display: "flex",
-    alignItems: "center",
-    padding: "10px 15px",
-    borderRadius: "5px",
-    marginBottom: "10px",
-    gap: "10px",
-    flexWrap: "wrap",
-  },
-  taskText: {
-    flex: 1,
-    fontSize: "16px",
-    textAlign: "left",
-  },
-  deleteButton: {
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "18px",
-  },
-  editBtn: {
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "18px",
-  },
-  saveBtn: {
-    backgroundColor: "#2196F3",
-    border: "none",
-    color: "#fff",
-    padding: "5px 10px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  editInput: {
-    padding: "5px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-    width: "100px",
-  },
-};
 
 export default App;
