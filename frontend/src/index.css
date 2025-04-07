@@ -1,3 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.footer {
+    text-align: center;
+    padding: 24px 16px;
+    background-color: #f4f4f4;
+    color: #333;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    margin-top: 40px;
+  }
+  
+  .footer p {
+    margin: 6px 0;
+  }
+  
+  .github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .github-link:hover {
+    color: #023e8a;
+    text-decoration: underline;
+  }
+  

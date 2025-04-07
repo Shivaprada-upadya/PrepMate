@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -78,9 +79,11 @@ function App() {
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
   return (
+      
+
     <div className={darkMode ? "app dark-mode" : "app"}>
       <h1>🚀 Placement Prep Tracker</h1>
-
+      
       <div className="form">
         <input
           type="text"
@@ -140,7 +143,24 @@ function App() {
       </div>
 
       <ToastContainer position="top-right" autoClose={2000} />
+      <footer className="footer">
+  <p>© {new Date().getFullYear()} <strong>Shivaprada Upadya</strong> · All rights reserved.</p>
+  <p>
+    <a
+      href="https://github.com/ShivapradaUpadya"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="github-link"
+    >
+      <FaGithub style={{ marginRight: "6px", verticalAlign: "middle" }} />
+      Visit my GitHub Profile
+    </a>
+  </p>
+</footer>
+
+
     </div>
+   
   );
 }
 
