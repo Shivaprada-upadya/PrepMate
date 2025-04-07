@@ -31,11 +31,11 @@
 
 ### 🏠 Homepage
 
-![Homepage Screenshot](./screenshots/homepage.png)
+![Homepage Screenshot](https://github.com/Shivaprada-upadya/PrepMate/blob/main/screennshots/homepage.png)
 
 ### 🌙 Dark Mode
 
-![Dark Mode Screenshot](./screenshots/dark-mode.png)
+![Dark Mode Screenshot](https://github.com/Shivaprada-upadya/PrepMate/blob/main/screennshots/dark-mode.png)
 
 ---
 
@@ -101,17 +101,15 @@ spring.jpa.hibernate.ddl-auto=update
 
 ## 📜 License
 
-```text
-MIT License
+This project is licensed under the **MIT License**.
 
-Copyright (c) 2025 Shivaprada
+&copy; 2025 [Shivaprada](https://github.com/shivaprada-upadya)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
-```
+Permission is hereby granted, free of charge, to any person obtaining a copy  
+of this software and associated documentation files (the "Software"), to deal  
+in the Software without restriction, including without limitation the rights  
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
+copies of the Software, and to permit persons to whom the Software is  
+furnished to do so, subject to the following conditions:
 
-> Full license available in the [LICENSE](./LICENSE) file.
-
----
-
+> Full license details can be found in the [LICENSE](./LICENSE) file.
