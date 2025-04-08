@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/PrepMate/static/css/main.07623e4d.chunk.css",
+    "main.js": "/PrepMate/static/js/main.af2024eb.chunk.js",
+    "main.js.map": "/PrepMate/static/js/main.af2024eb.chunk.js.map",
+    "runtime-main.js": "/PrepMate/static/js/runtime-main.ad89631b.js",
+    "runtime-main.js.map": "/PrepMate/static/js/runtime-main.ad89631b.js.map",
+    "static/css/2.b24350a8.chunk.css": "/PrepMate/static/css/2.b24350a8.chunk.css",
+    "static/js/2.8cd26d70.chunk.js": "/PrepMate/static/js/2.8cd26d70.chunk.js",
+    "static/js/2.8cd26d70.chunk.js.map": "/PrepMate/static/js/2.8cd26d70.chunk.js.map",
+    "static/js/3.41463fe0.chunk.js": "/PrepMate/static/js/3.41463fe0.chunk.js",
+    "static/js/3.41463fe0.chunk.js.map": "/PrepMate/static/js/3.41463fe0.chunk.js.map",
+    "index.html": "/PrepMate/index.html",
+    "precache-manifest.c9d82d9e51bb67057d9998f2a1794cc8.js": "/PrepMate/precache-manifest.c9d82d9e51bb67057d9998f2a1794cc8.js",
+    "service-worker.js": "/PrepMate/service-worker.js",
+    "static/css/2.b24350a8.chunk.css.map": "/PrepMate/static/css/2.b24350a8.chunk.css.map",
+    "static/css/main.07623e4d.chunk.css.map": "/PrepMate/static/css/main.07623e4d.chunk.css.map",
+    "static/js/2.8cd26d70.chunk.js.LICENSE.txt": "/PrepMate/static/js/2.8cd26d70.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ad89631b.js",
+    "static/css/2.b24350a8.chunk.css",
+    "static/js/2.8cd26d70.chunk.js",
+    "static/css/main.07623e4d.chunk.css",
+    "static/js/main.af2024eb.chunk.js"
+  ]
+}
